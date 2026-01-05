@@ -30,64 +30,123 @@
             padding: 18px 45px; font-size: 1.2rem; border: none; border-radius: 50px;
             background: white; color: var(--pink-dark); cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: 0.3s; font-weight: 600;
-            opacity: 0.6; /* Süre dolana kadar hafif solgun görünür */
         }
-        #surpriseBtn:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 
         /* ANA İÇERİK */
-        #content { display: none; padding-bottom: 100px; animation: fadeIn 1s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #content { display: none; padding-bottom: 100px; }
         .container { max-width: 800px; margin: auto; padding: 20px; }
         header { text-align: center; padding: 60px 0; }
         header h1 { font-size: 2.5rem; color: var(--pink-dark); text-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
         section { margin-bottom: 80px; }
         h2 { text-align: center; color: var(--pink-dark); margin-bottom: 30px; font-size: 1.8rem; }
 
-        /* GALERİ */
         .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .gallery img {
-            width: 100%; height: 250px; object-fit: cover; border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08); transition: 0.4s;
-        }
-        .gallery img:hover { transform: translateY(-10px) rotate(2deg); }
+        .gallery img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
 
-        /* NOT ALANI */
-        .note-card {
-            background: white; padding: 40px; border-radius: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.05); text-align: center;
-            font-size: 1.1rem; line-height: 1.8; border: 2px dashed var(--pink);
-        }
+        .note-card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.05); text-align: center; border: 2px dashed var(--pink); }
 
-        /* KEDİ BÖLÜMÜ */
         .cat-section { text-align: center; }
-        .cat-wrapper { position: relative; display: inline-block; cursor: pointer; }
-        #catImg {
-            width: 220px; height: 220px; border-radius: 50%;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15); transition: 0.3s;
-            object-fit: cover;
-        }
-        .cat-wrapper:active #catImg { transform: scale(0.9); }
+        #catImg { width: 220px; height: 220px; border-radius: 50%; box-shadow: 0 15px 35px rgba(0,0,0,0.15); object-fit: cover; }
         .jump { animation: jumpAnim 0.6s infinite alternate; }
         @keyframes jumpAnim { from { transform: translateY(0); } to { transform: translateY(-30px); } }
-
         #meowText { margin-top: 20px; font-size: 1.5rem; font-weight: 700; color: var(--pink-dark); display: none; }
 
-        /* MÜZİK */
-        .music-btn {
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-            border-radius: 50%; background: var(--pink-dark); color: white;
-            border: none; cursor: pointer; font-size: 1.5rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 2000;
-        }
-        @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; } .time-box { min-width: 65px; padding: 10px; } .time-box span { font-size: 1.5rem; }
-        }
+        .music-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--pink-dark); color: white; border: none; cursor: pointer; z-index: 2000; }
     </style>
 </head>
 <body>
 
     <div id="intro">
-        <h3 class="intro-title" id="statusTitle">Ada'nın 20. Yaşına Kalan Zaman:</h3>
+        <h3 class="intro-title" id="baslik">Ada'nın 20. Yaşına Kalan Zaman:</h3>
         <div class="countdown">
             <div class="time-box"><span id="days">00</span>Gün</div>
-            <div class="time-box"><span id="hours">
+            <div class="time-box"><span id="hours">00</span>Saat</div>
+            <div class="time-box"><span id="minutes">00</span>Dakika</div>
+        </div>
+        <button id="surpriseBtn">Sürprizi Aç ✨</button>
+        <p id="uyari" style="margin-top:20px; opacity:0.8; font-size:0.9rem;">Süre dolmadan kilit açılmaz! 🔒</p>
+    </div>
+
+    <div id="content">
+        <div class="container">
+            <header><h1>İyi ki Doğdun Ada! ✨<br>Artık 20 Oldun!</h1></header>
+            <section>
+                <h2>Anılarımız</h2>
+                <div class="gallery">
+                    <img src="2.jpeg"><img src="1.jpeg"><img src="5.jpeg">
+                    <img src="3.jpeg"><img src="6.jpeg"><img src="4.jpeg">
+                </div>
+            </section>
+            <section>
+                <h2>Sana Küçük Bir Not</h2>
+                <div class="note-card">
+                    Doğum günü kutlu olsun, yurt dışında olduğumdan yanına gelip kutlayamadım. Özür dilerim, seni seviyorum. Nice beraber yaşlara!❤️(Bir de normalde müzik koyacaktım buraya, doğum günün kutlu olsun ada diye üşendim.)
+                </div>
+            </section>
+            <section class="cat-section">
+                <h2>Tıkla!</h2>
+                <div id="catTrigger" style="cursor:pointer; display:inline-block;">
+                    <img id="catImg" src="122.png">
+                    <div id="meowText">Seni seviyorum!! ❤️</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <audio id="birthdayMusic" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+    <button class="music-btn" id="musicToggle">▶</button>
+
+    <script>
+        // TARİHİ BURADAN KONTROL EDER
+        const birthdayDate = new Date("January 29, 2026 12:00:00").getTime();
+        let kilitAcik = false;
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById("days").innerText = d > 0 ? d : 0;
+            document.getElementById("hours").innerText = h > 0 ? h : 0;
+            document.getElementById("minutes").innerText = m > 0 ? m : 0;
+
+            if (distance <= 0) {
+                clearInterval(timer);
+                kilitAcik = true; // SÜRE DOLUNCA KİLİT AÇILIR
+                document.getElementById("baslik").innerText = "Bugün Büyük Gün! 🎉";
+                document.getElementById("uyari").innerText = "Sürpriz hazır! Tıkla!";
+            }
+        }, 1000);
+
+        // BUTON KONTROLÜ (KİLİT BURADA)
+        document.getElementById('surpriseBtn').onclick = function() {
+            if (kilitAcik === false) {
+                alert("Henüz zamanı gelmedi Ada! Biraz daha sabretmelisin. 😊");
+                return; // Süre dolmadıysa aşağıdaki kodlar çalışmaz!
+            }
+            // SÜRE DOLDUYSA BURASI ÇALIŞIR
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('birthdayMusic').play();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        };
+
+        const catImg = document.getElementById('catImg');
+        document.getElementById('catTrigger').onclick = function() {
+            catImg.classList.toggle('jump');
+            document.getElementById('meowText').style.display = 'block';
+            setTimeout(() => { catImg.classList.remove('jump'); document.getElementById('meowText').style.display = 'none'; }, 3000);
+        };
+
+        let isPlaying = false;
+        document.getElementById('musicToggle').onclick = function() {
+            const music = document.getElementById('birthdayMusic');
+            if (isPlaying) { music.pause(); this.innerText = '▶'; } else { music.play(); this.innerText = '||'; }
+            isPlaying = !isPlaying;
+        };
+    </script>
+</body>
+</html>

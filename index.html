@@ -1,287 +1,272 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>İyi ki Doğdun Ada</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İyi ki Doğdun Ada!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --pink: #d8a1b5;
+            --pink-dark: #c48ca3;
+            --bg: #fff6f9;
+            --white: #ffffff;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); overflow-x: hidden; color: #444; }
 
-<style>
-:root{
-  --pink:#d8a1b5;
-  --pink-dark:#c48ca3;
-  --bg:#fff6f9;
-  --white:#fff;
-}
+        /* GİRİŞ EKRANI (COUNTDOWN BURADA) */
+        #intro {
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0; left: 0;
+            background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:Poppins,sans-serif}
+        .intro-title { font-size: 1.5rem; margin-bottom: 20px; font-weight: 300; }
 
-body{
-  background:var(--bg);
-  overflow-x:hidden;
-}
+        .countdown { display: flex; gap: 15px; margin-bottom: 40px; }
+        .time-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            min-width: 80px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        .time-box span { display: block; font-size: 2rem; font-weight: 700; }
 
-/* YÜZEN IŞIKLAR */
-.light{
-  position:fixed;
-  width:12px;
-  height:12px;
-  background:rgba(255,255,255,.5);
-  border-radius:50%;
-  animation:float 12s linear infinite;
-  z-index: 1;
-}
-@keyframes float{
-  from{transform:translateY(110vh)}
-  to{transform:translateY(-10vh)}
-}
+        #surpriseBtn {
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            color: var(--pink-dark);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        #surpriseBtn:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 
-/* GİRİŞ EKRANI */
-#intro{
-  height:100vh;
-  display:flex;
-  flex-direction: column;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,var(--pink),var(--pink-dark));
-  text-align: center;
-  padding: 20px;
-  position: relative;
-  z-index: 2;
-}
+        /* ANA İÇERİK */
+        #content { display: none; padding-bottom: 100px; animation: fadeIn 1s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* GİRİŞTEKİ SAYAÇ */
-.intro-countdown {
-  margin-bottom: 30px;
-}
-.intro-countdown h3 {
-  color: white;
-  margin-bottom: 15px;
-  font-weight: 400;
-}
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        
+        header { text-align: center; padding: 60px 0; }
+        header h1 { font-size: 2.5rem; color: var(--pink-dark); text-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
 
-.countdown{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-}
-.time-box{
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  padding: 15px;
-  border-radius: 15px;
-  min-width: 75px;
-  text-align: center;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-.time-box span{
-  font-size: 1.5rem;
-  font-weight: 700;
-  display: block;
-}
+        section { margin-bottom: 80px; }
+        h2 { text-align: center; color: var(--pink-dark); margin-bottom: 30px; font-size: 1.8rem; }
 
-#surpriseBtn{
-  padding:18px 40px;
-  font-size:1.1rem;
-  border:none;
-  border-radius:50px;
-  background:white;
-  color:var(--pink-dark);
-  cursor:pointer;
-  box-shadow:0 15px 35px rgba(0,0,0,.25);
-  transition: 0.3s;
-}
+        /* GALERİ */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: 0.4s;
+        }
+        .gallery img:hover { transform: translateY(-10px) rotate(2deg); }
 
-#surpriseBtn:hover { transform: scale(1.05); }
+        /* NOT ALANI */
+        .note-card {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            border: 2px dashed var(--pink);
+        }
 
-#lockText{
-  margin-top:15px;
-  color:white;
-  font-size:.9rem;
-}
+        /* KEDİ BÖLÜMÜ */
+        .cat-section { text-align: center; }
+        .cat-wrapper { position: relative; display: inline-block; cursor: pointer; }
+        #catImg {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 8px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            object-fit: cover;
+        }
+        .cat-wrapper:active #catImg { transform: scale(0.9); }
+        .jump { animation: jumpAnim 0.6s infinite alternate; }
+        @keyframes jumpAnim { from { transform: translateY(0); } to { transform: translateY(-30px); } }
 
-/* ANA İÇERİK */
-#content{
-  display:none;
-  max-width:900px;
-  margin:auto;
-  padding:30px 20px 80px;
-  animation:reveal 1s ease;
-}
-@keyframes reveal{
-  from{opacity:0;transform:scale(.95)}
-  to{opacity:1;transform:scale(1)}
-}
+        #meowText {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--pink-dark);
+            display: none;
+        }
 
-header h1{
-  text-align:center;
-  font-size:2rem;
-  background:linear-gradient(90deg,var(--pink),var(--pink-dark));
-  -webkit-background-clip:text;
-  color:transparent;
-  margin-bottom:40px;
-}
+        /* MÜZİK */
+        .music-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--pink-dark); color: white;
+            border: none; cursor: pointer; font-size: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 2000;
+        }
 
-section{margin-bottom:60px}
-h2{text-align:center;color:var(--pink-dark);margin-bottom:25px}
-
-/* GALERİ (6 FOTOĞRAF) */
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px, 1fr));
-  gap:20px;
-}
-.gallery img{
-  width:100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius:16px;
-  transition:.4s;
-  box-shadow:0 10px 25px rgba(0,0,0,.1);
-}
-.gallery img:hover{ transform: scale(1.03); }
-
-  <section>
-  <h2>Senin İçin Küçük Bir Not</h2>
-  <div style="background:white; padding:25px; border-radius:22px; box-shadow:0 12px 30px rgba(0,0,0,0.1); text-align:center;">
-    Ada, yeni yaşın sana tüm güzellikleri getirsin. İyi ki varsın!
-  </div>
-</section>
-  
-/* KEDİ */
-.cat-container{text-align:center; position:relative}
-#cat{
-  width:200px;
-  border-radius: 50%;
-  cursor:pointer;
-  transition:.4s;
-  border: 5px solid white;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-.cat-container img.happy{ animation:jump .6s infinite alternate; }
-@keyframes jump{ from{transform:translateY(0)} to{transform:translateY(-20px)} }
-
-/* MÜZİK BUTONU */
-.music-control{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  border:none;
-  background:var(--pink-dark);
-  color:white;
-  cursor:pointer;
-  z-index: 100;
-}
-</style>
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .time-box { min-width: 65px; padding: 10px; }
+            .time-box span { font-size: 1.5rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="intro">
-  <div class="intro-countdown">
-    <h3>Kalan Zaman:</h3>
-    <div class="countdown">
-      <div class="time-box"><span id="days">0</span>Gün</div>
-      <div class="time-box"><span id="hours">0</span>Saat</div>
-      <div class="time-box"><span id="minutes">0</span>Dakika</div>
+    <div id="intro">
+        <h3 class="intro-title">Ada'nın 20. Yaşına Kalan Zaman:</h3>
+        <div class="countdown">
+            <div class="time-box"><span id="days">00</span>Gün</div>
+            <div class="time-box"><span id="hours">00</span>Saat</div>
+            <div class="time-box"><span id="minutes">00</span>Dakika</div>
+        </div>
+        <button id="surpriseBtn">Sürprizi Aç ✨</button>
     </div>
-  </div>
-  
-  <button id="surpriseBtn">Sürprizi Aç</button>
-  <div id="lockText">Senin için bir şey hazırladım</div>
-</div>
 
-<div id="content">
-  <header><h1>İyi ki Doğdun Ada! ✨</h1></header>
+    <div id="content">
+        <div class="container">
+            <header>
+                <h1>İyi ki Doğdun Ada! ✨<br>Artık 20 Oldun!</h1>
+            </header>
 
-  <section>
-    <h2>Anılarımız</h2>
-    <div class="gallery">
-      <img src="https://picsum.photos/400/400?1">
-      <img src="https://picsum.photos/400/400?2">
-      <img src="https://picsum.photos/400/400?3">
-      <img src="https://picsum.photos/400/400?4">
-      <img src="https://picsum.photos/400/400?5">
-      <img src="https://picsum.photos/400/400?6">
+            <section>
+                <h2>Anılarımız</h2>
+                <div class="gallery">
+                    <img src="https://picsum.photos/400/500?1" alt="Anı 1">
+                    <img src="https://picsum.photos/400/500?2" alt="Anı 2">
+                    <img src="https://picsum.photos/400/500?3" alt="Anı 3">
+                    <img src="https://picsum.photos/400/500?4" alt="Anı 4">
+                    <img src="https://picsum.photos/400/500?5" alt="Anı 5">
+                    <img src="https://picsum.photos/400/500?6" alt="Anı 6">
+                </div>
+            </section>
+
+            <section>
+                <h2>Sana Küçük Bir Not</h2>
+                <div class="note-card">
+                     ❤️
+                </div>
+            </section>
+
+            <section class="cat-section">
+                <h2>Tıkla 🐱</h2>
+                <div class="cat-wrapper" id="catTrigger">
+                    <img id="catImg" src="https://placekitten.com/400/400" alt="Sürpriz Kedi">
+                    <div id="meowText">oley!❤️</div>
+                </div>
+            </section>
+        </div>
     </div>
-  </section>
 
-  <section>
-    <h2></h2>
-    <p style="text-align:center; margin-bottom:15px;">Bana tıklar mısın?</p>
-    <div class="cat-container">
-      <img id="cat" src="https://hizliresim.com/1ip2jkb" alt="Kedi">
-      <div id="meowText" style="display:none; margin-top:10px; font-weight:bold; color:var(--pink-dark);">Miyav</div>
-    </div>
-  </section>
-</div>
+    <audio id="birthdayMusic" loop>
+        <source src="https://on.soundcloud.com/UErtuUmhBfQyNMm9Tf" type="audio/mpeg">
+    </audio>
+    <button class="music-btn" id="musicToggle">▶</button>
 
-<audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-<button class="music-control" id="musicBtn">▶</button>
+    <script>
+        // 1. GERİ SAYIM AYARI
+        // DÜZENLE: Buradaki tarihi Ada'nın doğum günüyle değiştir (Ay İngilizce olmalı: January, February vb.)
+        const birthdayDate = new Date("January 1, 2026 00:00:00").getTime();
 
-<script>
-/* YÜZEN IŞIKLAR */
-for(let i=0;i<20;i++){
-  const l=document.createElement('div');
-  l.className='light';
-  l.style.left=Math.random()*100+'vw';
-  l.style.animationDuration=6+Math.random()*10+'s';
-  l.style.opacity=Math.random();
-  document.body.appendChild(l);
-}
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
 
-/* GERİ SAYIM MANTIĞI */
-const targetDate = new Date('January 29, 2026 00:00:00').getTime();
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-setInterval(() => {
-  const now = new Date().getTime();
-  const diff = targetDate - now;
+            document.getElementById("days").innerText = d > 0 ? d : 0;
+            document.getElementById("hours").innerText = h > 0 ? h : 0;
+            document.getElementById("minutes").innerText = m > 0 ? m : 0;
 
-  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector(".intro-title").innerText = "Bugün Büyük Gün! 🎉";
+            }
+        }, 1000);
 
-  document.getElementById('days').innerText = d > 0 ? d : 0;
-  document.getElementById('hours').innerText = h > 0 ? h : 0;
-  document.getElementById('minutes').innerText = m > 0 ? m : 0;
-}, 1000);
+        // 2. SÜRPRİZİ AÇ BUTONU
+        const surpriseBtn = document.getElementById('surpriseBtn');
+        const intro = document.getElementById('intro');
+        const content = document.getElementById('content');
+        const music = document.getElementById('birthdayMusic');
 
-/* SÜRPRİZİ AÇ */
-const btn = document.getElementById('surpriseBtn');
-btn.onclick = () => {
-  document.getElementById('intro').style.display = 'none';
-  document.getElementById('content').style.display = 'block';
-  document.getElementById('music').play();
-  confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-};
+        surpriseBtn.onclick = function() {
+            intro.style.display = 'none';
+            content.style.display = 'block';
+            music.play();
+            // Konfeti patlat
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        };
 
-/* KEDİ ETKİLEŞİMİ */
-const cat = document.getElementById('cat');
-cat.onclick = () => {
-  cat.classList.toggle('happy');
-  document.getElementById('meowText').style.display = 'block';
-  confetti({ particleCount: 50, scalar: 2, shapes: ['heart'] });
-  setTimeout(() => { document.getElementById('meowText').style.display = 'none'; }, 2000);
-};
+        // 3. KEDİ ETKİLEŞİMİ
+        const catTrigger = document.getElementById('catTrigger');
+        const catImg = document.getElementById('catImg');
+        const meowText = document.getElementById('meowText');
 
-/* MÜZİK KONTROL */
-let playing = false;
-const mBtn = document.getElementById('musicBtn');
-const audio = document.getElementById('music');
-mBtn.onclick = () => {
-  if(!playing) { audio.play(); mBtn.textContent = '❚❚'; }
-  else { audio.pause(); mBtn.textContent = '▶'; }
-  playing = !playing;
-};
-</script>
+        catTrigger.onclick = function() {
+            catImg.classList.toggle('jump');
+            meowText.style.display = 'block';
+            
+            // Kalpli konfeti
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                colors: ['#ff69b4', '#ff1493'],
+                shapes: ['square'] // Not: Standart kütüphanede kalp için ek ayar gerekir, bu renkli kare atar.
+            });
 
+            setTimeout(() => {
+                catImg.classList.remove('jump');
+                meowText.style.display = 'none';
+            }, 3000);
+        };
+
+        // 4. MÜZİK KONTROL
+        const musicBtn = document.getElementById('musicToggle');
+        let isPlaying = false;
+        musicBtn.onclick = function() {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.innerText = '▶';
+            } else {
+                music.play();
+                musicBtn.innerText = '||';
+            }
+            isPlaying = !isPlaying;
+        };
+    </script>
 </body>
 </html>

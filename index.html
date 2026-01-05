@@ -8,109 +8,64 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root {
-            --pink: #d8a1b5;
-            --pink-dark: #c48ca3;
-            --bg: #fff6f9;
-            --white: #ffffff;
-        }
-
+        :root { --pink: #d8a1b5; --pink-dark: #c48ca3; --bg: #fff6f9; --white: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); overflow-x: hidden; color: #444; }
 
-        /* GİRİŞ EKRANI (COUNTDOWN BURADA) */
+        /* GİRİŞ EKRANI */
         #intro {
-            height: 100vh;
-            width: 100%;
-            position: fixed;
-            top: 0; left: 0;
+            height: 100vh; width: 100%; position: fixed; top: 0; left: 0;
             background: linear-gradient(135deg, var(--pink), var(--pink-dark));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            text-align: center;
-            color: white;
-            padding: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1000; text-align: center; color: white; padding: 20px;
         }
-
         .intro-title { font-size: 1.5rem; margin-bottom: 20px; font-weight: 300; }
-
         .countdown { display: flex; gap: 15px; margin-bottom: 40px; }
         .time-box {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 15px;
-            min-width: 80px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 15px;
+            min-width: 80px; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(5px);
         }
         .time-box span { display: block; font-size: 2rem; font-weight: 700; }
-
         #surpriseBtn {
-            padding: 18px 45px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 50px;
-            background: white;
-            color: var(--pink-dark);
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            transition: 0.3s;
-            font-weight: 600;
+            padding: 18px 45px; font-size: 1.2rem; border: none; border-radius: 50px;
+            background: white; color: var(--pink-dark); cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: 0.3s; font-weight: 600;
         }
         #surpriseBtn:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 
         /* ANA İÇERİK */
         #content { display: none; padding-bottom: 100px; animation: fadeIn 1s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .container { max-width: 800px; margin: auto; padding: 20px; }
-        
         header { text-align: center; padding: 60px 0; }
         header h1 { font-size: 2.5rem; color: var(--pink-dark); text-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
-
         section { margin-bottom: 80px; }
         h2 { text-align: center; color: var(--pink-dark); margin-bottom: 30px; font-size: 1.8rem; }
 
         /* GALERİ */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
         .gallery img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            transition: 0.4s;
+            width: 100%; height: 250px; object-fit: cover; border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08); transition: 0.4s;
         }
         .gallery img:hover { transform: translateY(-10px) rotate(2deg); }
 
         /* NOT ALANI */
         .note-card {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
-            text-align: center;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            border: 2px dashed var(--pink);
+            background: white; padding: 40px; border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05); text-align: center;
+            font-size: 1.1rem; line-height: 1.8; border: 2px dashed var(--pink);
         }
 
-        /* KEDİ BÖLÜMÜ */
+        /* KEDİ BÖLÜMÜ (Çerçeve Kaldırıldı) */
         .cat-section { text-align: center; }
         .cat-wrapper { position: relative; display: inline-block; cursor: pointer; }
         #catImg {
             width: 220px;
             height: 220px;
             border-radius: 50%;
-            border: 8px solid white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            /* border: 8px solid white;  <-- BU SATIRI SİLDİK */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); /* Gölgeyi biraz artırdık ki çerçevesiz de şık dursun */
             transition: 0.3s;
             object-fit: cover;
         }
@@ -119,26 +74,19 @@
         @keyframes jumpAnim { from { transform: translateY(0); } to { transform: translateY(-30px); } }
 
         #meowText {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--pink-dark);
-            display: none;
+            margin-top: 20px; font-size: 1.5rem; font-weight: 700;
+            color: var(--pink-dark); display: none;
         }
 
         /* MÜZİK */
         .music-btn {
-            position: fixed; bottom: 30px; right: 30px;
-            width: 60px; height: 60px; border-radius: 50%;
-            background: var(--pink-dark); color: white;
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            border-radius: 50%; background: var(--pink-dark); color: white;
             border: none; cursor: pointer; font-size: 1.5rem;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 2000;
         }
-
         @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; }
-            .time-box { min-width: 65px; padding: 10px; }
-            .time-box span { font-size: 1.5rem; }
+            header h1 { font-size: 1.8rem; } .time-box { min-width: 65px; padding: 10px; } .time-box span { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -156,9 +104,7 @@
 
     <div id="content">
         <div class="container">
-            <header>
-                <h1>İyi ki Doğdun Ada! ✨<br>Artık 20 Oldun!</h1>
-            </header>
+            <header><h1>İyi ki Doğdun Ada! ✨<br>Artık 20 Oldun!</h1></header>
 
             <section>
                 <h2>Anılarımız</h2>
@@ -175,97 +121,63 @@
             <section>
                 <h2>Sana Küçük Bir Not</h2>
                 <div class="note-card">
-                    Ada Doğum günün kutlu olsun, daha güzel bir şeyi hak ediyordun. Özür dilerim..
-                    Yeni yaşında her şey gönlünce olsun, iyi ki varsın ve iyi ki hayatımızdasın! Nice beraber yaşlara! ❤️
+                    Doğum günü kutlu olsun, yurt dışında olduğumdan yanına gelip kutlayamadım. Özür dilerim, seni seviyorum. Nice beraber yaşlara!❤️
                 </div>
             </section>
 
             <section class="cat-section">
-                <h2>Tıkla!</h2>
+                <h2>Bana Tıklar mısın? 🐱</h2>
                 <div class="cat-wrapper" id="catTrigger">
                     <img id="catImg" src="transparent.JPG" alt="Sürpriz Kedi">
-                    <div id="meowText">Oley!!❤️</div>
+                    <div id="meowText">MİYAV! SENİ SEVİYORUM! ❤️</div>
                 </div>
             </section>
         </div>
     </div>
 
     <audio id="birthdayMusic" loop>
-        <source src="https://on.soundcloud.com/gyK4CjOeD0I0zMrl4m" type="audio/mpeg">
+        <source src="https://on.soundcloud.com/hY1s2e55bZtSLfYHNF" type="audio/mpeg">
     </audio>
     <button class="music-btn" id="musicToggle">▶</button>
 
     <script>
-        // 1. GERİ SAYIM AYARI
-        // DÜZENLE: Buradaki tarihi Ada'nın doğum günüyle değiştir (Ay İngilizce olmalı: January, February vb.)
+        // TARİH AYARI BURAYA (Ay İngilizce olmalı)
         const birthdayDate = new Date("January 1, 2026 00:00:00").getTime();
 
         const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = birthdayDate - now;
-
+            const now = new Date().getTime(); const distance = birthdayDate - now;
             const d = Math.floor(distance / (1000 * 60 * 60 * 24));
             const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
             document.getElementById("days").innerText = d > 0 ? d : 0;
             document.getElementById("hours").innerText = h > 0 ? h : 0;
             document.getElementById("minutes").innerText = m > 0 ? m : 0;
-
-            if (distance < 0) {
-                clearInterval(timer);
-                document.querySelector(".intro-title").innerText = "Bugün Büyük Gün! 🎉";
-            }
+            if (distance < 0) { clearInterval(timer); document.querySelector(".intro-title").innerText = "Bugün Büyük Gün! 🎉"; }
         }, 1000);
 
-        // 2. SÜRPRİZİ AÇ BUTONU
         const surpriseBtn = document.getElementById('surpriseBtn');
         const intro = document.getElementById('intro');
         const content = document.getElementById('content');
         const music = document.getElementById('birthdayMusic');
 
         surpriseBtn.onclick = function() {
-            intro.style.display = 'none';
-            content.style.display = 'block';
-            music.play();
-            // Konfeti patlat
+            intro.style.display = 'none'; content.style.display = 'block'; music.play();
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         };
 
-        // 3. KEDİ ETKİLEŞİMİ
         const catTrigger = document.getElementById('catTrigger');
         const catImg = document.getElementById('catImg');
         const meowText = document.getElementById('meowText');
 
         catTrigger.onclick = function() {
-            catImg.classList.toggle('jump');
-            meowText.style.display = 'block';
-            
-            // Kalpli konfeti
-            confetti({
-                particleCount: 50,
-                spread: 60,
-                colors: ['#ff69b4', '#ff1493'],
-                shapes: ['square'] // Not: Standart kütüphanede kalp için ek ayar gerekir, bu renkli kare atar.
-            });
-
-            setTimeout(() => {
-                catImg.classList.remove('jump');
-                meowText.style.display = 'none';
-            }, 3000);
+            catImg.classList.toggle('jump'); meowText.style.display = 'block';
+            confetti({ particleCount: 50, spread: 60, colors: ['#ff69b4', '#ff1493'], shapes: ['square'] });
+            setTimeout(() => { catImg.classList.remove('jump'); meowText.style.display = 'none'; }, 3000);
         };
 
-        // 4. MÜZİK KONTROL
-        const musicBtn = document.getElementById('musicToggle');
-        let isPlaying = false;
+        const musicBtn = document.getElementById('musicToggle'); let isPlaying = false;
         musicBtn.onclick = function() {
-            if (isPlaying) {
-                music.pause();
-                musicBtn.innerText = '▶';
-            } else {
-                music.play();
-                musicBtn.innerText = '||';
-            }
+            if (isPlaying) { music.pause(); musicBtn.innerText = '▶'; } else { music.play(); musicBtn.innerText = '||'; }
             isPlaying = !isPlaying;
         };
     </script>

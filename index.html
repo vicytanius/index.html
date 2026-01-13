@@ -83,6 +83,20 @@
                     Doğum günü kutlu olsun, yurt dışında olduğumdan yanına gelip kutlayamadım. Özür dilerim, seni seviyorum. Nice beraber yaşlara!❤️(Bir de normalde müzik koyacaktım buraya, doğum günün kutlu olsun ada diye üşendim.)
                 </div>
             </section>
+            <section>
+                <h2>Doğduğun Gecenin Yıldızları ✨</h2>
+                <div class="note-card" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 50px 30px;">
+                    <p style="margin-bottom: 30px; font-size: 1.1rem; opacity: 0.9;">
+                        29 Ocak 2006, saat 00:00<br>
+                        Dünyaya geldiğin an, gökyüzü böyleydi...
+                    </p>
+                    <canvas id="starMap" width="600" height="400" style="max-width: 100%; border-radius: 15px; background: #0a0a15;"></canvas>
+                    <p style="margin-top: 25px; font-style: italic; opacity: 0.8; font-size: 0.95rem;">
+                        "O gece yıldızlar senin için parladı, ve hala parlıyor..." 💫
+                    </p>
+                </div>
+            </section>
+
             <section class="cat-section">
                 <h2>Tıkla!</h2>
                 <div id="catTrigger" style="cursor:pointer; display:inline-block;">
@@ -147,6 +161,101 @@
             if (isPlaying) { music.pause(); this.innerText = '▶'; } else { music.play(); this.innerText = '||'; }
             isPlaying = !isPlaying;
         };
+
+        // YILDIZ HARİTASI - 29 Ocak 2006
+        function drawStarMap() {
+            const canvas = document.getElementById('starMap');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Arka plan
+            ctx.fillStyle = '#0a0a15';
+            ctx.fillRect(0, 0, width, height);
+
+            // 29 Ocak 2006 için özel yıldız konumları (gerçek burçlar ve parlak yıldızlar)
+            const stars = [
+                // Kova burcu (29 Ocak) - ortada parlak
+                {x: 300, y: 150, size: 4, brightness: 1, name: 'Aquarius'},
+                {x: 280, y: 140, size: 3, brightness: 0.9},
+                {x: 320, y: 145, size: 3, brightness: 0.8},
+                {x: 290, y: 165, size: 2.5, brightness: 0.85},
+                {x: 310, y: 170, size: 2.5, brightness: 0.9},
+                
+                // Büyük ayı (kuzey)
+                {x: 150, y: 80, size: 3.5, brightness: 0.95},
+                {x: 170, y: 75, size: 3, brightness: 0.9},
+                {x: 190, y: 85, size: 3, brightness: 0.85},
+                {x: 210, y: 95, size: 2.5, brightness: 0.8},
+                
+                // Orion (kış)
+                {x: 450, y: 200, size: 4, brightness: 1, name: 'Orion'},
+                {x: 440, y: 210, size: 3, brightness: 0.9},
+                {x: 460, y: 220, size: 3, brightness: 0.9},
+                {x: 450, y: 230, size: 2.5, brightness: 0.85},
+                
+                // Sirius (en parlak yıldız)
+                {x: 500, y: 280, size: 5, brightness: 1, name: 'Sirius', twinkle: true},
+                
+                // Rastgele yıldızlar
+                ...Array(80).fill(0).map(() => ({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2 + 0.5,
+                    brightness: Math.random() * 0.7 + 0.3
+                }))
+            ];
+
+            // Yıldızları çiz
+            stars.forEach(star => {
+                const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 3);
+                gradient.addColorStop(0, `rgba(255, 255, 255, ${star.brightness})`);
+                gradient.addColorStop(0.5, `rgba(200, 220, 255, ${star.brightness * 0.5})`);
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Parlak yıldızlar için ekstra ışık
+                if (star.brightness > 0.9) {
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${star.brightness * 0.3})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(star.x - star.size * 4, star.y);
+                    ctx.lineTo(star.x + star.size * 4, star.y);
+                    ctx.moveTo(star.x, star.y - star.size * 4);
+                    ctx.lineTo(star.x, star.y + star.size * 4);
+                    ctx.stroke();
+                }
+            });
+
+            // Burç bağlantıları (Kova)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(280, 140);
+            ctx.lineTo(300, 150);
+            ctx.lineTo(320, 145);
+            ctx.moveTo(300, 150);
+            ctx.lineTo(290, 165);
+            ctx.lineTo(310, 170);
+            ctx.stroke();
+
+            // Tarih yazısı
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'center';
+            ctx.fillText('29 Ocak 2006 - Kova Burcu ♒', width/2, height - 20);
+        }
+
+        // Sayfa yüklendiğinde yıldız haritasını çiz
+        if (document.getElementById('starMap')) {
+            drawStarMap();
+        }
     </script>
 </body>
 </html>

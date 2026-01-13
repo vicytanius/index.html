@@ -98,7 +98,7 @@
 
     <script>
         // TARİHİ BURADAN KONTROL EDER
-        const birthdayDate = new Date("January 29, 2026 12:00:00").getTime();
+        const birthdayDate = new Date("January 29, 2026 14:05:00").getTime();
         let kilitAcik = false;
 
         const timer = setInterval(function() {
@@ -123,7 +123,7 @@
 
         // BUTON KONTROLÜ (KİLİT BURADA)
         document.getElementById('surpriseBtn').onclick = function() {
-            if (kilitAcik === false) {
+            if (!kilitAcik) {
                 alert("Henüz zamanı gelmedi Ada! Biraz daha sabretmelisin. 😊");
                 return; // Süre dolmadıysa aşağıdaki kodlar çalışmaz!
             }

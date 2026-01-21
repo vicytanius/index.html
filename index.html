@@ -65,6 +65,14 @@
         @keyframes jumpAnim { from { transform: translateY(0); } to { transform: translateY(-30px); } }
         #meowText { margin-top: 20px; font-size: 1.5rem; font-weight: 700; color: var(--pink-dark); display: none; }
 
+        /* OYUN STILI */
+        .game-container { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); max-width: 600px; margin: 0 auto; }
+        #gameCanvas { border: 3px solid var(--pink); border-radius: 15px; display: block; margin: 20px auto; background: #fffafc; cursor: crosshair; }
+        .game-info { display: flex; justify-content: space-around; margin-top: 20px; font-size: 1.2rem; font-weight: 600; color: var(--pink-dark); }
+        #startGameBtn { padding: 15px 40px; font-size: 1.1rem; border: none; border-radius: 50px; background: var(--pink-dark); color: white; cursor: pointer; margin-top: 15px; transition: 0.3s; font-weight: 600; }
+        #startGameBtn:hover { background: var(--pink); transform: scale(1.05); }
+        .game-message { text-align: center; margin-top: 15px; font-size: 1.1rem; color: var(--pink-dark); font-weight: 600; min-height: 30px; }
+
         .music-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--pink-dark); color: white; border: none; cursor: pointer; z-index: 2000; }
     </style>
 </head>
@@ -113,6 +121,22 @@
                 </div>
             </section>
 
+            <section>
+                <h2>Mini Oyun: Cupcake Topla! 🧁</h2>
+                <div class="game-container">
+                    <p style="text-align: center; margin-bottom: 15px;">Düşen cupcake'leri topla, bombaları sakın! Her cupcake = 10 puan! 🎂</p>
+                    <canvas id="gameCanvas" width="500" height="400"></canvas>
+                    <div class="game-info">
+                        <div>Skor: <span id="score">0</span></div>
+                        <div>Süre: <span id="timer">30</span>s</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button id="startGameBtn">Oyunu Başlat! 🎮</button>
+                    </div>
+                    <div class="game-message" id="gameMessage"></div>
+                </div>
+            </section>
+
             <section class="cat-section">
                 <h2>Tıkla!</h2>
                 <div id="catTrigger" style="cursor:pointer; display:inline-block;">
@@ -128,7 +152,7 @@
 
     <script>
         // TARİHİ BURADAN KONTROL EDER
-        const birthdayDate = new Date("January 29, 2026 18:10:00").getTime();
+        const birthdayDate = new Date("January 29, 2026 12:00:00").getTime();
         let kilitAcik = false;
 
         const timer = setInterval(function() {
@@ -271,6 +295,155 @@
         // Sayfa yüklendiğinde ve boyut değiştiğinde çiz
         drawStarBackground();
         window.addEventListener('resize', drawStarBackground);
+
+        // MİNİ OYUN - CUPCAKE TOPLA
+        const gameCanvas = document.getElementById('gameCanvas');
+        const gameCtx = gameCanvas.getContext('2d');
+        let gameRunning = false;
+        let score = 0;
+        let timeLeft = 30;
+        let basketX = 225;
+        let fallingItems = [];
+        let gameInterval;
+        let spawnInterval;
+
+        class FallingItem {
+            constructor() {
+                this.x = Math.random() * (gameCanvas.width - 40);
+                this.y = -40;
+                this.speed = Math.random() * 2 + 2;
+                this.isBomb = Math.random() < 0.25; // 25% bomba şansı
+                this.emoji = this.isBomb ? '💣' : ['🧁', '🎂', '🍰', '🍪'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.y += this.speed;
+            }
+
+            draw() {
+                gameCtx.font = '35px Arial';
+                gameCtx.fillText(this.emoji, this.x, this.y);
+            }
+
+            isOffScreen() {
+                return this.y > gameCanvas.height;
+            }
+
+            checkCollision(bx) {
+                return this.y > gameCanvas.height - 60 && 
+                       this.y < gameCanvas.height - 20 &&
+                       this.x > bx - 20 && 
+                       this.x < bx + 70;
+            }
+        }
+
+        function drawBasket() {
+            // Sepet (pembe)
+            gameCtx.fillStyle = '#ff69b4';
+            gameCtx.fillRect(basketX, gameCanvas.height - 50, 50, 40);
+            gameCtx.fillStyle = '#ff85cc';
+            gameCtx.fillRect(basketX - 10, gameCanvas.height - 50, 70, 10);
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            // Temizle
+            gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            // Sepeti çiz
+            drawBasket();
+
+            // Düşen itemları güncelle ve çiz
+            fallingItems.forEach((item, index) => {
+                item.update();
+                item.draw();
+
+                // Çarpışma kontrolü
+                if (item.checkCollision(basketX)) {
+                    if (item.isBomb) {
+                        score = Math.max(0, score - 20);
+                        document.getElementById('gameMessage').textContent = '💥 Bombaa! -20 puan!';
+                        setTimeout(() => document.getElementById('gameMessage').textContent = '', 1000);
+                    } else {
+                        score += 10;
+                        document.getElementById('gameMessage').textContent = '🎉 +10 puan!';
+                        setTimeout(() => document.getElementById('gameMessage').textContent = '', 500);
+                    }
+                    fallingItems.splice(index, 1);
+                }
+
+                // Ekran dışına çıktıysa sil
+                if (item.isOffScreen()) {
+                    fallingItems.splice(index, 1);
+                }
+            });
+
+            document.getElementById('score').textContent = score;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            timeLeft = 30;
+            fallingItems = [];
+            document.getElementById('score').textContent = '0';
+            document.getElementById('timer').textContent = '30';
+            document.getElementById('gameMessage').textContent = '';
+            document.getElementById('startGameBtn').disabled = true;
+
+            // Zamanlayıcı
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            // Item spawn
+            spawnInterval = setInterval(() => {
+                if (gameRunning) {
+                    fallingItems.push(new FallingItem());
+                }
+            }, 800);
+
+            gameLoop();
+        }
+
+        function endGame() {
+            gameRunning = false;
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            document.getElementById('startGameBtn').disabled = false;
+            
+            let message = score >= 200 ? '🏆 Mükemmel! Ada\'yı mutlu ettin!' :
+                         score >= 100 ? '🎉 Harika oynadın!' :
+                         score >= 50 ? '😊 Fena değil!' :
+                         '💪 Bir daha dene!';
+            
+            document.getElementById('gameMessage').textContent = `Oyun Bitti! ${message} Skor: ${score}`;
+        }
+
+        // Mouse ile sepeti hareket ettir
+        gameCanvas.addEventListener('mousemove', (e) => {
+            const rect = gameCanvas.getBoundingClientRect();
+            basketX = e.clientX - rect.left - 25;
+            basketX = Math.max(0, Math.min(basketX, gameCanvas.width - 50));
+        });
+
+        // Touch desteği
+        gameCanvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = gameCanvas.getBoundingClientRect();
+            basketX = e.touches[0].clientX - rect.left - 25;
+            basketX = Math.max(0, Math.min(basketX, gameCanvas.width - 50));
+        });
+
+        document.getElementById('startGameBtn').addEventListener('click', startGame);
 
         // Sayfa yüklendiğinde yıldız haritasını çiz
         if (document.getElementById('starMap')) {

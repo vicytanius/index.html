@@ -8,22 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        :root { --pink: #d8a1b5; --pink-dark: #c48ca3; --bg: #fff6f9; --white: #ffffff; }
+        :root { --pink: #d8a1b5; --pink-dark: #c48ca3; --bg: #fff6f9; --white: #ffffff; --text-color: #5d4037; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { 
-            background: linear-gradient(135deg, #ffeef5 0%, #ffe0f0 50%, #ffd5eb 100%);
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
             overflow-x: hidden; 
-            color: #444; 
+            color: var(--text-color); 
             position: relative;
-        }
-        #starBackground {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.4;
         }
 
         /* GİRİŞ EKRANI */
@@ -55,7 +46,8 @@
         h2 { text-align: center; color: var(--pink-dark); margin-bottom: 30px; font-size: 1.8rem; }
 
         .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .gallery img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .gallery img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.08); transition: transform 0.3s; }
+        .gallery img:hover { transform: scale(1.02); }
 
         .note-card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.05); text-align: center; border: 2px dashed var(--pink); }
 
@@ -67,18 +59,22 @@
 
         /* OYUN STILI */
         .game-container { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); max-width: 600px; margin: 0 auto; }
-        #gameCanvas { border: 3px solid var(--pink); border-radius: 15px; display: block; margin: 20px auto; background: #fffafc; cursor: crosshair; }
+        #gameCanvas { border: 3px solid var(--pink); border-radius: 15px; display: block; margin: 20px auto; background: #fffafc; cursor: crosshair; width: 100%; max-width: 500px; }
         .game-info { display: flex; justify-content: space-around; margin-top: 20px; font-size: 1.2rem; font-weight: 600; color: var(--pink-dark); }
         #startGameBtn { padding: 15px 40px; font-size: 1.1rem; border: none; border-radius: 50px; background: var(--pink-dark); color: white; cursor: pointer; margin-top: 15px; transition: 0.3s; font-weight: 600; }
         #startGameBtn:hover { background: var(--pink); transform: scale(1.05); }
         .game-message { text-align: center; margin-top: 15px; font-size: 1.1rem; color: var(--pink-dark); font-weight: 600; min-height: 30px; }
 
-        .music-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--pink-dark); color: white; border: none; cursor: pointer; z-index: 2000; }
+        /* BLOCK BLAST OYUNU */
+        #blockBlastCanvas { border: 3px solid var(--pink); border-radius: 15px; display: block; margin: 20px auto; background: #fdfdfd; cursor: pointer; width: 100%; max-width: 400px; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+        .block-info { display: flex; justify-content: space-around; margin-top: 20px; font-size: 1.2rem; font-weight: 600; color: var(--pink-dark); }
+        #startBlockBtn { padding: 15px 40px; font-size: 1.1rem; border: none; border-radius: 50px; background: var(--pink-dark); color: white; cursor: pointer; margin-top: 15px; transition: 0.3s; font-weight: 600; }
+        #startBlockBtn:hover { background: var(--pink); transform: scale(1.05); }
+
+        .music-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--pink-dark); color: white; border: none; cursor: pointer; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-
-    <canvas id="starBackground"></canvas>
 
     <div id="intro">
         <h3 class="intro-title" id="baslik">Ada'nın 20. Yaşına Kalan Zaman:</h3>
@@ -97,8 +93,8 @@
             <section>
                 <h2>Anılarımız</h2>
                 <div class="gallery">
-                    <img src="2.jpeg"><img src="1.jpeg"><img src="5.jpeg">
-                    <img src="3.jpeg"><img src="6.jpeg"><img src="4.jpeg">
+                    <img src="2.jpeg" alt="Anı 1"><img src="1.jpeg" alt="Anı 2"><img src="5.jpeg" alt="Anı 3">
+                    <img src="3.jpeg" alt="Anı 4"><img src="6.jpeg" alt="Anı 5"><img src="4.jpeg" alt="Anı 6">
                 </div>
             </section>
             <section>
@@ -109,12 +105,12 @@
             </section>
             <section>
                 <h2>Doğduğun Gecenin Yıldızları ✨</h2>
-                <div class="note-card" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 50px 30px;">
-                    <p style="margin-bottom: 30px; font-size: 1.1rem; opacity: 0.9;">
+                <div class="note-card" style="background: linear-gradient(135deg, #5c2b3b 0%, #884d68 100%); color: white; padding: 30px 20px;">
+                    <p style="margin-bottom: 20px; font-size: 1.1rem; opacity: 0.9;">
                         29 Ocak 2006, saat 00:00<br>
                         Dünyaya geldiğin an, gökyüzü böyleydi...
                     </p>
-                    <canvas id="starMap" width="600" height="400" style="max-width: 100%; border-radius: 15px; background: #0a0a15;"></canvas>
+                    <canvas id="starMap" width="600" height="400" style="width: 100%; border-radius: 15px; background: radial-gradient(circle at bottom, #4a2030 0%, #2e101b 100%); box-shadow: 0 10px 20px rgba(0,0,0,0.3);"></canvas>
                     <p style="margin-top: 25px; font-style: italic; opacity: 0.8; font-size: 0.95rem;">
                         "O gece yıldızlar senin için parladı, ve hala parlıyor..." 💫
                     </p>
@@ -137,10 +133,25 @@
                 </div>
             </section>
 
+            <section>
+                <h2>Block Blast Oyunu! 🎮</h2>
+                <div class="game-container">
+                    <p style="text-align: center; margin-bottom: 15px;">Blokları yerleştir, satırları ve sütunları tamamla!</p>
+                    <canvas id="blockBlastCanvas" width="400" height="550"></canvas>
+                    <div class="block-info">
+                        <div>Skor: <span id="blockScore">0</span></div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button id="startBlockBtn">Yeni Oyun 🎮</button>
+                    </div>
+                    <div class="game-message" id="blockMessage"></div>
+                </div>
+            </section>
+
             <section class="cat-section">
                 <h2>Tıkla!</h2>
                 <div id="catTrigger" style="cursor:pointer; display:inline-block;">
-                    <img id="catImg" src="122.png">
+                    <img id="catImg" src="122.png" alt="Kedi">
                     <div id="meowText">Seni seviyorum!! ❤️</div>
                 </div>
             </section>
@@ -151,14 +162,13 @@
     <button class="music-btn" id="musicToggle">▶</button>
 
     <script>
-        // TARİHİ BURADAN KONTROL EDER
-        const birthdayDate = new Date("January 29, 2026 12:00:00").getTime();
-        let kilitAcik = true;
+        // TARİH KONTROLÜ
+        const birthdayDate = new Date("January 21, 2026 12:00:00").getTime();
+        let kilitAcik = false; // Test için bunu 'true' yapabilirsin
 
         const timer = setInterval(function() {
             const now = new Date().getTime();
             const distance = birthdayDate - now;
-
             const d = Math.floor(distance / (1000 * 60 * 60 * 24));
             const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -169,25 +179,31 @@
 
             if (distance <= 0) {
                 clearInterval(timer);
-                kilitAcik = true; // SÜRE DOLUNCA KİLİT AÇILIR
+                kilitAcik = true;
                 document.getElementById("baslik").innerText = "Bugün Büyük Gün! 🎉";
                 document.getElementById("uyari").innerText = "Sürpriz hazır! Tıkla!";
             }
         }, 1000);
 
-        // BUTON KONTROLÜ (KİLİT BURADA)
         document.getElementById('surpriseBtn').onclick = function() {
             if (!kilitAcik) {
                 alert("Henüz zamanı gelmedi Ada! Biraz daha sabretmelisin. 😊");
-                return; // Süre dolmadıysa aşağıdaki kodlar çalışmaz!
+                return;
             }
-            // SÜRE DOLDUYSA BURASI ÇALIŞIR
             document.getElementById('intro').style.display = 'none';
             document.getElementById('content').style.display = 'block';
-            document.getElementById('birthdayMusic').play();
+            
+            // Yıldız haritasını içerik açıldığında çiz
+            setTimeout(drawStarMap, 100); 
+
+            try {
+                document.getElementById('birthdayMusic').play();
+            } catch(e) { console.log("Otomatik oynatma tarayıcı tarafından engellendi"); }
+            
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         };
 
+        // KEDİ EFEKTİ
         const catImg = document.getElementById('catImg');
         document.getElementById('catTrigger').onclick = function() {
             catImg.classList.toggle('jump');
@@ -195,108 +211,89 @@
             setTimeout(() => { catImg.classList.remove('jump'); document.getElementById('meowText').style.display = 'none'; }, 3000);
         };
 
+        // MÜZİK BUTONU
         let isPlaying = false;
         document.getElementById('musicToggle').onclick = function() {
             const music = document.getElementById('birthdayMusic');
-            if (isPlaying) { music.pause(); this.innerText = '▶'; } else { music.play(); this.innerText = '||'; }
+            if (isPlaying) { music.pause(); this.innerText = '▶'; } 
+            else { music.play(); this.innerText = '||'; }
             isPlaying = !isPlaying;
         };
 
-        // YILDIZ HARİTASI - ARKA PLAN (Pembe tonlarda)
-        function drawStarBackground() {
-            const canvas = document.getElementById('starBackground');
+        // ---------------------------------------------------------
+        // YENİ YILDIZ HARİTASI (CANVAS İÇİNDE)
+        // ---------------------------------------------------------
+        function drawStarMap() {
+            const canvas = document.getElementById('starMap');
             if (!canvas) return;
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
             const ctx = canvas.getContext('2d');
             const width = canvas.width;
             const height = canvas.height;
 
-            // Arka plan temizle
+            // Arka planı temizle
             ctx.clearRect(0, 0, width, height);
 
-            // 29 Ocak 2006 için özel yıldız konumları (pembe tonlarda)
             const centerX = width / 2;
             const centerY = height / 2;
-            
-            const stars = [
-                // Kova burcu (29 Ocak) - merkezi
-                {x: centerX, y: centerY - 100, size: 5, color: '#ff69b4', brightness: 1},
-                {x: centerX - 40, y: centerY - 120, size: 4, color: '#ff85cc', brightness: 0.9},
-                {x: centerX + 40, y: centerY - 110, size: 4, color: '#ff99dd', brightness: 0.85},
-                {x: centerX - 20, y: centerY - 80, size: 3.5, color: '#ffa6e6', brightness: 0.8},
-                {x: centerX + 20, y: centerY - 75, size: 3.5, color: '#ffb3ee', brightness: 0.85},
-                
-                // Büyük parlak yıldızlar (pembe-mor tonlar)
-                {x: centerX - 200, y: centerY - 200, size: 5, color: '#ff1493', brightness: 1},
-                {x: centerX + 180, y: centerY - 180, size: 4.5, color: '#ff69b4', brightness: 0.95},
-                {x: centerX - 150, y: centerY + 100, size: 4, color: '#ff85cc', brightness: 0.9},
-                {x: centerX + 160, y: centerY + 120, size: 4, color: '#ff99dd', brightness: 0.9},
-                
-                // Rastgele pembe yıldızlar
-                ...Array(120).fill(0).map(() => {
-                    const colors = ['#ff69b4', '#ff85cc', '#ff99dd', '#ffa6e6', '#ffb3ee', '#ffc0f5', '#e6b3ff', '#d9b3ff'];
-                    return {
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        size: Math.random() * 3 + 0.8,
-                        color: colors[Math.floor(Math.random() * colors.length)],
-                        brightness: Math.random() * 0.7 + 0.3
-                    };
-                })
+
+            // Kova Burcu (Aquarius) Çizimi - Pembe/Beyaz tonlarda
+            const aquariusStars = [
+                {x: centerX + 20, y: centerY - 60, name: 'Sadalmelik'},
+                {x: centerX - 30, y: centerY - 70, name: 'Sadalsuud'},
+                {x: centerX, y: centerY - 40, name: 'Eta Aquarii'}, // Merkez
+                {x: centerX - 10, y: centerY - 10, name: 'Ancha'},
+                {x: centerX + 30, y: centerY + 10, name: 'Skat'},
+                {x: centerX + 60, y: centerY + 40, name: 'Albali'}
             ];
 
-            // Yıldızları çiz
-            stars.forEach(star => {
-                const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 4);
-                gradient.addColorStop(0, `${star.color}${Math.floor(star.brightness * 255).toString(16).padStart(2, '0')}`);
-                gradient.addColorStop(0.5, `${star.color}${Math.floor(star.brightness * 128).toString(16).padStart(2, '0')}`);
-                gradient.addColorStop(1, 'rgba(255, 182, 193, 0)');
-                
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size * 2.5, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Parlak yıldızlar için çapraz ışık
-                if (star.brightness > 0.85) {
-                    ctx.strokeStyle = `${star.color}${Math.floor(star.brightness * 80).toString(16).padStart(2, '0')}`;
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(star.x - star.size * 5, star.y);
-                    ctx.lineTo(star.x + star.size * 5, star.y);
-                    ctx.moveTo(star.x, star.y - star.size * 5);
-                    ctx.lineTo(star.x, star.y + star.size * 5);
-                    ctx.stroke();
-                }
-            });
-
-            // Kova burcu bağlantıları (ince pembe çizgiler)
-            ctx.strokeStyle = 'rgba(255, 105, 180, 0.25)';
-            ctx.lineWidth = 1.5;
+            // Çizgileri çiz
             ctx.beginPath();
-            ctx.moveTo(centerX - 40, centerY - 120);
-            ctx.lineTo(centerX, centerY - 100);
-            ctx.lineTo(centerX + 40, centerY - 110);
-            ctx.moveTo(centerX, centerY - 100);
-            ctx.lineTo(centerX - 20, centerY - 80);
-            ctx.lineTo(centerX + 20, centerY - 75);
+            ctx.strokeStyle = 'rgba(255, 192, 203, 0.4)';
+            ctx.lineWidth = 1.5;
+            // Basit bir bağlantı
+            ctx.moveTo(aquariusStars[1].x, aquariusStars[1].y);
+            ctx.lineTo(aquariusStars[2].x, aquariusStars[2].y);
+            ctx.lineTo(aquariusStars[0].x, aquariusStars[0].y);
+            ctx.moveTo(aquariusStars[2].x, aquariusStars[2].y);
+            ctx.lineTo(aquariusStars[3].x, aquariusStars[3].y);
+            ctx.lineTo(aquariusStars[4].x, aquariusStars[4].y);
             ctx.stroke();
 
-            // Romantik mesaj (sağ alt köşe)
-            ctx.fillStyle = 'rgba(255, 105, 180, 0.6)';
-            ctx.font = 'italic 16px Poppins';
-            ctx.textAlign = 'right';
-            ctx.fillText('29 Ocak 2006 - Senin yıldızların ✨', width - 30, height - 30);
+            // Burç Yıldızlarını çiz
+            aquariusStars.forEach(star => {
+                ctx.beginPath();
+                ctx.fillStyle = '#fff';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#ff69b4';
+                ctx.arc(star.x, star.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            // Rastgele Arka Plan Yıldızları
+            for(let i=0; i<150; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 2;
+                const opacity = Math.random();
+                
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(255, 220, 230, ${opacity})`;
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Metin
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'center';
+            ctx.fillText("Kova Takımyıldızı (Temsili)", centerX, centerY + 80);
         }
 
-        // Sayfa yüklendiğinde ve boyut değiştiğinde çiz
-        drawStarBackground();
-        window.addEventListener('resize', drawStarBackground);
 
-        // MİNİ OYUN - CUPCAKE TOPLA
+        // ---------------------------------------------------------
+        // CUPCAKE OYUNU
+        // ---------------------------------------------------------
         const gameCanvas = document.getElementById('gameCanvas');
         const gameCtx = gameCanvas.getContext('2d');
         let gameRunning = false;
@@ -304,151 +301,364 @@
         let timeLeft = 30;
         let basketX = 225;
         let fallingItems = [];
-        let gameInterval;
-        let spawnInterval;
+        let gameInterval, spawnInterval;
 
         class FallingItem {
             constructor() {
                 this.x = Math.random() * (gameCanvas.width - 40);
                 this.y = -40;
                 this.speed = Math.random() * 2 + 2;
-                this.isBomb = Math.random() < 0.25; // 25% bomba şansı
+                this.isBomb = Math.random() < 0.25; 
                 this.emoji = this.isBomb ? '💣' : ['🧁', '🎂', '🍰', '🍪'][Math.floor(Math.random() * 4)];
             }
-
-            update() {
-                this.y += this.speed;
-            }
-
-            draw() {
-                gameCtx.font = '35px Arial';
-                gameCtx.fillText(this.emoji, this.x, this.y);
-            }
-
-            isOffScreen() {
-                return this.y > gameCanvas.height;
-            }
-
+            update() { this.y += this.speed; }
+            draw() { gameCtx.font = '35px Arial'; gameCtx.fillText(this.emoji, this.x, this.y); }
             checkCollision(bx) {
-                return this.y > gameCanvas.height - 60 && 
-                       this.y < gameCanvas.height - 20 &&
-                       this.x > bx - 20 && 
-                       this.x < bx + 70;
+                return this.y > gameCanvas.height - 60 && this.y < gameCanvas.height - 10 &&
+                       this.x > bx - 20 && this.x < bx + 70;
             }
-        }
-
-        function drawBasket() {
-            // Sepet (pembe)
-            gameCtx.fillStyle = '#ff69b4';
-            gameCtx.fillRect(basketX, gameCanvas.height - 50, 50, 40);
-            gameCtx.fillStyle = '#ff85cc';
-            gameCtx.fillRect(basketX - 10, gameCanvas.height - 50, 70, 10);
         }
 
         function gameLoop() {
             if (!gameRunning) return;
-
-            // Temizle
             gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // Sepet
+            gameCtx.fillStyle = '#ff69b4';
+            gameCtx.fillRect(basketX, gameCanvas.height - 50, 50, 40);
+            gameCtx.fillStyle = '#ff85cc';
+            gameCtx.fillRect(basketX - 10, gameCanvas.height - 50, 70, 10);
 
-            // Sepeti çiz
-            drawBasket();
-
-            // Düşen itemları güncelle ve çiz
-            fallingItems.forEach((item, index) => {
+            for(let i = fallingItems.length - 1; i >= 0; i--) {
+                let item = fallingItems[i];
                 item.update();
                 item.draw();
-
-                // Çarpışma kontrolü
+                
                 if (item.checkCollision(basketX)) {
                     if (item.isBomb) {
                         score = Math.max(0, score - 20);
-                        document.getElementById('gameMessage').textContent = '💥 Bombaa! -20 puan!';
-                        setTimeout(() => document.getElementById('gameMessage').textContent = '', 1000);
+                        showGameMsg('💥 -20 puan!');
                     } else {
                         score += 10;
-                        document.getElementById('gameMessage').textContent = '🎉 +10 puan!';
-                        setTimeout(() => document.getElementById('gameMessage').textContent = '', 500);
+                        showGameMsg('🎉 +10 puan!');
                     }
-                    fallingItems.splice(index, 1);
+                    fallingItems.splice(i, 1);
+                } else if (item.y > gameCanvas.height) {
+                    fallingItems.splice(i, 1);
                 }
-
-                // Ekran dışına çıktıysa sil
-                if (item.isOffScreen()) {
-                    fallingItems.splice(index, 1);
-                }
-            });
-
+            }
             document.getElementById('score').textContent = score;
-
             requestAnimationFrame(gameLoop);
         }
 
-        function startGame() {
-            gameRunning = true;
-            score = 0;
-            timeLeft = 30;
-            fallingItems = [];
-            document.getElementById('score').textContent = '0';
-            document.getElementById('timer').textContent = '30';
-            document.getElementById('gameMessage').textContent = '';
-            document.getElementById('startGameBtn').disabled = true;
+        function showGameMsg(text) {
+            const msg = document.getElementById('gameMessage');
+            msg.textContent = text;
+            setTimeout(() => msg.textContent = '', 800);
+        }
 
-            // Zamanlayıcı
+        function startGame() {
+            gameRunning = true; score = 0; timeLeft = 30; fallingItems = [];
+            document.getElementById('score').textContent = '0';
+            document.getElementById('startGameBtn').disabled = true;
+            
             gameInterval = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timer').textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    endGame();
-                }
+                if (timeLeft <= 0) endGame();
             }, 1000);
 
-            // Item spawn
             spawnInterval = setInterval(() => {
-                if (gameRunning) {
-                    fallingItems.push(new FallingItem());
-                }
+                if(gameRunning) fallingItems.push(new FallingItem());
             }, 800);
-
             gameLoop();
         }
 
         function endGame() {
             gameRunning = false;
-            clearInterval(gameInterval);
-            clearInterval(spawnInterval);
+            clearInterval(gameInterval); clearInterval(spawnInterval);
             document.getElementById('startGameBtn').disabled = false;
-            
-            let message = score >= 200 ? '🏆 Mükemmel! Ada\'yı mutlu ettin!' :
-                         score >= 100 ? '🎉 Harika oynadın!' :
-                         score >= 50 ? '😊 Fena değil!' :
-                         '💪 Bir daha dene!';
-            
-            document.getElementById('gameMessage').textContent = `Oyun Bitti! ${message} Skor: ${score}`;
+            let msg = score >= 100 ? "Harikasın!" : "İyi deneme!";
+            document.getElementById('gameMessage').textContent = `Oyun Bitti! ${msg} Skor: ${score}`;
         }
 
-        // Mouse ile sepeti hareket ettir
-        gameCanvas.addEventListener('mousemove', (e) => {
+        // Mouse/Touch Kontrol
+        function moveBasket(clientX) {
             const rect = gameCanvas.getBoundingClientRect();
-            basketX = e.clientX - rect.left - 25;
-            basketX = Math.max(0, Math.min(basketX, gameCanvas.width - 50));
-        });
-
-        // Touch desteği
-        gameCanvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const rect = gameCanvas.getBoundingClientRect();
-            basketX = e.touches[0].clientX - rect.left - 25;
-            basketX = Math.max(0, Math.min(basketX, gameCanvas.width - 50));
-        });
-
+            let x = clientX - rect.left - 25;
+            basketX = Math.max(0, Math.min(x, gameCanvas.width - 50));
+        }
+        gameCanvas.addEventListener('mousemove', e => moveBasket(e.clientX));
+        gameCanvas.addEventListener('touchmove', e => { e.preventDefault(); moveBasket(e.touches[0].clientX); });
         document.getElementById('startGameBtn').addEventListener('click', startGame);
 
-        // Sayfa yüklendiğinde yıldız haritasını çiz
-        if (document.getElementById('starMap')) {
-            drawStarMap();
+        // ---------------------------------------------------------
+        // GÜNCELLENMİŞ BLOCK BLAST OYUNU (Hitbox Düzeltildi)
+        // ---------------------------------------------------------
+        const blockCanvas = document.getElementById('blockBlastCanvas');
+        const blockCtx = blockCanvas.getContext('2d');
+        const gridSize = 8;
+        const cellSize = 40;
+        const gridOffsetX = 40; // Izgarayı ortalamak için
+        const gridOffsetY = 100;
+        
+        let blockGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(0));
+        let blockScore = 0;
+        let currentPiece = null;
+        let nextPieces = [];
+        let isDragging = false;
+        let dragStartPos = {x:0, y:0}; // Parçanın neresinden tuttuğumuz
+
+        const blockShapes = [
+            [[1]], [[1,1]], [[1],[1]], [[1,1],[1,1]], 
+            [[1,1,1]], [[1],[1],[1]], [[1,0],[1,1]], 
+            [[1,1,1],[1,0,0]], [[1,1,1],[0,0,1]]
+        ];
+
+        function initBlockGame() {
+            blockGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(0));
+            blockScore = 0;
+            document.getElementById('blockScore').textContent = '0';
+            generateNextPieces();
+            drawBlockGame();
         }
+
+        function generateNextPieces() {
+            nextPieces = [];
+            const colors = ['#ff69b4', '#ff85cc', '#9370db', '#ff1493', '#db7093'];
+            for (let i = 0; i < 3; i++) {
+                const shape = blockShapes[Math.floor(Math.random() * blockShapes.length)];
+                // Parçaları yan yana diz (Canvas genişliği 400)
+                nextPieces.push({
+                    shape: shape,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    x: 30 + i * 110, // Aralıklı yerleşim
+                    y: 30,
+                    scale: 25 // Aşağıdaki önizleme boyutu
+                });
+            }
+        }
+
+        function drawBlockGame() {
+            blockCtx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+
+            // 1. Grid Çizimi
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    const x = c * cellSize + gridOffsetX;
+                    const y = r * cellSize + gridOffsetY;
+                    
+                    if (blockGrid[r][c]) {
+                        blockCtx.fillStyle = blockGrid[r][c];
+                        blockCtx.fillRect(x, y, cellSize-2, cellSize-2);
+                        // Parlama efekti
+                        blockCtx.strokeStyle = "rgba(255,255,255,0.5)";
+                        blockCtx.strokeRect(x, y, cellSize-2, cellSize-2);
+                    } else {
+                        blockCtx.strokeStyle = '#e0e0e0';
+                        blockCtx.strokeRect(x, y, cellSize-2, cellSize-2);
+                    }
+                }
+            }
+
+            // 2. Alt Kısımdaki Parçalar
+            nextPieces.forEach(p => {
+                if(p) drawPiece(p.shape, p.x, p.y, p.color, p.scale);
+            });
+
+            // 3. Sürüklenen Parça (En üstte çizilmeli)
+            if (currentPiece && isDragging) {
+                // Sürüklerken boyut orijinal ızgara boyutu (40px) olsun
+                // Mouse'un biraz yukarısında çiz (offset) ki parmak/mouse kapatmasın
+                drawPiece(currentPiece.shape, currentPiece.x, currentPiece.y, currentPiece.color, cellSize);
+            }
+        }
+
+        function drawPiece(shape, x, y, color, size) {
+            blockCtx.fillStyle = color;
+            blockCtx.strokeStyle = 'white';
+            shape.forEach((row, i) => {
+                row.forEach((val, j) => {
+                    if (val) {
+                        blockCtx.fillRect(x + j * size, y + i * size, size-2, size-2);
+                        blockCtx.strokeRect(x + j * size, y + i * size, size-2, size-2);
+                    }
+                });
+            });
+        }
+
+        // MOUSE EVENTS (Hitbox Düzeltilmiş)
+        blockCanvas.addEventListener('mousedown', e => handleInputStart(e));
+        blockCanvas.addEventListener('mousemove', e => handleInputMove(e));
+        blockCanvas.addEventListener('mouseup', e => handleInputEnd(e));
+        
+        // TOUCH EVENTS
+        blockCanvas.addEventListener('touchstart', e => {
+            e.preventDefault(); 
+            handleInputStart(e.touches[0]);
+        });
+        blockCanvas.addEventListener('touchmove', e => {
+            e.preventDefault();
+            handleInputMove(e.touches[0]);
+        });
+        blockCanvas.addEventListener('touchend', e => {
+            e.preventDefault();
+            handleInputEnd(e.changedTouches[0]);
+        });
+
+        function getMousePos(evt) {
+            const rect = blockCanvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        function handleInputStart(evt) {
+            const pos = getMousePos(evt);
+            
+            // Hangi parçaya tıklandı?
+            for(let i=0; i<nextPieces.length; i++) {
+                const p = nextPieces[i];
+                if(!p) continue;
+                
+                // Basit bounding box kontrolü (scale 25px üzerinden)
+                const pWidth = p.shape[0].length * p.scale;
+                const pHeight = p.shape.length * p.scale;
+                
+                // Hitbox'ı biraz genişletelim ki mobilde kolay seçilsin (+10px padding)
+                if (pos.x >= p.x - 10 && pos.x <= p.x + pWidth + 10 &&
+                    pos.y >= p.y - 10 && pos.y <= p.y + pHeight + 10) {
+                    
+                    // Seçilen parçayı kopyala
+                    currentPiece = { ...p, originalIndex: i };
+                    
+                    // Tıkladığımız yer ile parçanın sol üst köşesi arasındaki fark
+                    dragStartPos.x = pos.x - p.x;
+                    dragStartPos.y = pos.y - p.y;
+                    
+                    // Parçayı hemen mouse'un ortasına oturt (daha doğal his)
+                    const actualWidth = p.shape[0].length * cellSize;
+                    const actualHeight = p.shape.length * cellSize;
+                    
+                    // Sürüklemeye başlarken parçayı ortala
+                    currentPiece.x = pos.x - (actualWidth / 2);
+                    currentPiece.y = pos.y - (actualHeight / 2) - 30; // Hafif yukarıda tut
+                    
+                    isDragging = true;
+                    drawBlockGame();
+                    break;
+                }
+            }
+        }
+
+        function handleInputMove(evt) {
+            if (!isDragging || !currentPiece) return;
+            const pos = getMousePos(evt);
+            
+            // Parçanın sol üst köşesini güncelle
+            // Mouse'un tam altında değil, biraz yukarısında olsun (-30px)
+            const actualWidth = currentPiece.shape[0].length * cellSize;
+            const actualHeight = currentPiece.shape.length * cellSize;
+            
+            currentPiece.x = pos.x - (actualWidth / 2);
+            currentPiece.y = pos.y - (actualHeight / 2) - 30;
+            
+            drawBlockGame();
+        }
+
+        function handleInputEnd(evt) {
+            if (!isDragging || !currentPiece) return;
+            
+            // Bırakılan yer ızgaraya denk geliyor mu?
+            // Parçanın MERKEZİNİ referans alalım
+            const centerX = currentPiece.x + (currentPiece.shape[0].length * cellSize) / 2;
+            const centerY = currentPiece.y + (currentPiece.shape.length * cellSize) / 2;
+            
+            // Grid koordinatlarına çevir
+            const col = Math.floor((currentPiece.x - gridOffsetX + (cellSize/2)) / cellSize);
+            const row = Math.floor((currentPiece.y - gridOffsetY + (cellSize/2)) / cellSize);
+
+            if (canPlace(currentPiece.shape, row, col)) {
+                placeShape(currentPiece.shape, row, col, currentPiece.color);
+                checkLines();
+                
+                // Aşağıdaki listeden parçayı sil
+                nextPieces[currentPiece.originalIndex] = null;
+                
+                // Hepsi bitti mi?
+                if (nextPieces.every(p => p === null)) generateNextPieces();
+            }
+
+            isDragging = false;
+            currentPiece = null;
+            drawBlockGame();
+        }
+
+        function canPlace(shape, r, c) {
+            for (let i = 0; i < shape.length; i++) {
+                for (let j = 0; j < shape[i].length; j++) {
+                    if (shape[i][j]) {
+                        let nr = r + i;
+                        let nc = c + j;
+                        // Sınır dışı veya dolu mu?
+                        if (nr < 0 || nr >= gridSize || nc < 0 || nc >= gridSize || blockGrid[nr][nc]) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        function placeShape(shape, r, c, color) {
+            shape.forEach((row, i) => {
+                row.forEach((val, j) => {
+                    if (val) blockGrid[r + i][c + j] = color;
+                });
+            });
+            blockScore += 10;
+            document.getElementById('blockScore').textContent = blockScore;
+        }
+
+        function checkLines() {
+            let linesCleared = 0;
+            
+            // Satır kontrol
+            for (let r = 0; r < gridSize; r++) {
+                if (blockGrid[r].every(v => v !== 0)) {
+                    blockGrid[r].fill(0);
+                    linesCleared++;
+                }
+            }
+            
+            // Sütun kontrol (biraz daha karmaşık, geçici matris kullanmadan)
+            // Sütunları temizlemek için önce hangi sütunların dolu olduğunu bul
+            let colsToClear = [];
+            for (let c = 0; c < gridSize; c++) {
+                let isFull = true;
+                for (let r = 0; r < gridSize; r++) {
+                    if (blockGrid[r][c] === 0) { isFull = false; break; }
+                }
+                if (isFull) colsToClear.push(c);
+            }
+            
+            colsToClear.forEach(c => {
+                for(let r=0; r<gridSize; r++) blockGrid[r][c] = 0;
+                linesCleared++;
+            });
+
+            if (linesCleared > 0) {
+                blockScore += linesCleared * 50;
+                document.getElementById('blockScore').textContent = blockScore;
+                const msg = document.getElementById('blockMessage');
+                msg.textContent = `Harika! ${linesCleared} hat temizlendi!`;
+                setTimeout(() => msg.textContent = '', 1500);
+            }
+        }
+
+        document.getElementById('startBlockBtn').onclick = initBlockGame;
+
     </script>
 </body>
 </html>

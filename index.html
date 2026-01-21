@@ -118,7 +118,7 @@
             </section>
 
             <section>
-                <h2>Mini Oyun: Cupcake Topla! 🧁</h2>
+                <h2>tatlı toplamaca 🧁</h2>
                 <div class="game-container">
                     <p style="text-align: center; margin-bottom: 15px;">Düşen cupcake'leri topla, bombaları sakın! Her cupcake = 10 puan! 🎂</p>
                     <canvas id="gameCanvas" width="500" height="400"></canvas>
@@ -134,7 +134,7 @@
             </section>
 
             <section>
-                <h2>Block Blast Oyunu! 🎮</h2>
+                <h2>block patlatmaca</h2>
                 <div class="game-container">
                     <p style="text-align: center; margin-bottom: 15px;">Blokları yerleştir, satırları ve sütunları tamamla!</p>
                     <canvas id="blockBlastCanvas" width="400" height="550"></canvas>
@@ -164,7 +164,7 @@
     <script>
         // TARİH KONTROLÜ
         const birthdayDate = new Date("January 21, 2026 12:00:00").getTime();
-        let kilitAcik = false; // Test için bunu 'true' yapabilirsin
+        let kilitAcik = true; // Test için bunu 'true' yapabilirsin
 
         const timer = setInterval(function() {
             const now = new Date().getTime();
@@ -287,7 +287,7 @@
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
             ctx.font = '14px Poppins';
             ctx.textAlign = 'center';
-            ctx.fillText("Kova Takımyıldızı (Temsili)", centerX, centerY + 80);
+            ctx.fillText("Kova Takımyıldızı", centerX, centerY + 80);
         }
 
 

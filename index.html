@@ -36,6 +36,10 @@
             background: white; color: var(--pink-dark); cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: 0.3s; font-weight: 600;
         }
+        #surpriseBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
 
         /* ANA İÇERİK */
         #content { display: none; padding-bottom: 100px; }
@@ -72,37 +76,45 @@
         #startBlockBtn:hover { background: var(--pink); transform: scale(1.05); }
 
         .music-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--pink-dark); color: white; border: none; cursor: pointer; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        .music-btn:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
 
     <div id="intro">
-        <h3 class="intro-title" id="baslik">Ada'nın 20. Yaşına Kalan Zaman:</h3>
+        <h3 class="intro-title" id="baslik">Bugün Büyük Gün! 🎉</h3>
         <div class="countdown">
             <div class="time-box"><span id="days">00</span>Gün</div>
             <div class="time-box"><span id="hours">00</span>Saat</div>
             <div class="time-box"><span id="minutes">00</span>Dakika</div>
         </div>
         <button id="surpriseBtn">Sürprizi Aç ✨</button>
-        <p id="uyari" style="margin-top:20px; opacity:0.8; font-size:0.9rem;">Süre dolmadan kilit açılmaz! 🔒</p>
+        <p id="uyari" style="margin-top:20px; opacity:0.8; font-size:0.9rem;">Sürpriz hazır! Tıkla! 🎁</p>
     </div>
 
     <div id="content">
         <div class="container">
             <header><h1>İyi ki Doğdun Ada! ✨<br>Artık 20 Oldun!</h1></header>
+            
             <section>
                 <h2>Anılarımız</h2>
                 <div class="gallery">
-                    <img src="2.jpeg" alt="Anı 1"><img src="1.jpeg" alt="Anı 2"><img src="5.jpeg" alt="Anı 3">
-                    <img src="3.jpeg" alt="Anı 4"><img src="6.jpeg" alt="Anı 5"><img src="4.jpeg" alt="Anı 6">
+                    <img src="2.jpeg" alt="Anı 1" onerror="this.src='https://via.placeholder.com/300x250/d8a1b5/ffffff?text=Anı+1'">
+                    <img src="1.jpeg" alt="Anı 2" onerror="this.src='https://via.placeholder.com/300x250/c48ca3/ffffff?text=Anı+2'">
+                    <img src="5.jpeg" alt="Anı 3" onerror="this.src='https://via.placeholder.com/300x250/d8a1b5/ffffff?text=Anı+3'">
+                    <img src="3.jpeg" alt="Anı 4" onerror="this.src='https://via.placeholder.com/300x250/c48ca3/ffffff?text=Anı+4'">
+                    <img src="6.jpeg" alt="Anı 5" onerror="this.src='https://via.placeholder.com/300x250/d8a1b5/ffffff?text=Anı+5'">
+                    <img src="4.jpeg" alt="Anı 6" onerror="this.src='https://via.placeholder.com/300x250/c48ca3/ffffff?text=Anı+6'">
                 </div>
             </section>
+            
             <section>
                 <h2>Sana Küçük Bir Not</h2>
                 <div class="note-card">
                     Doğum günü kutlu olsun, iyi ki seninle tanışmışım. Tekrar doğsam seninle tekrar tanışmak isterdim, seni çok seviyom. 
                 </div>
             </section>
+            
             <section>
                 <h2>Doğduğun Gecenin Yıldızları ✨</h2>
                 <div class="note-card" style="background: linear-gradient(135deg, #5c2b3b 0%, #884d68 100%); color: white; padding: 30px 20px;">
@@ -120,14 +132,14 @@
             <section>
                 <h2>tatlı toplamaca 🧁</h2>
                 <div class="game-container">
-                    <p style="text-align: center; margin-bottom: 15px;">Düşen cupcake'leri topla, bombaları sakın! Her cupcake = 10 puan! 🎂</p>
+                    <p style="text-align: center; margin-bottom: 15px;">Düşen cupcake'leri topla her cupcake = 10 puan 🎂</p>
                     <canvas id="gameCanvas" width="500" height="400"></canvas>
                     <div class="game-info">
                         <div>Skor: <span id="score">0</span></div>
                         <div>Süre: <span id="timer">30</span>s</div>
                     </div>
                     <div style="text-align: center;">
-                        <button id="startGameBtn">Oyunu Başlat! 🎮</button>
+                        <button id="startGameBtn">Başlat! </button>
                     </div>
                     <div class="game-message" id="gameMessage"></div>
                 </div>
@@ -151,21 +163,22 @@
             <section class="cat-section">
                 <h2>Tıkla!</h2>
                 <div id="catTrigger" style="cursor:pointer; display:inline-block;">
-                    <img id="catImg" src="122.png" alt="Kedi">
+                    <img id="catImg" src="122.png" alt="Kedi" onerror="this.src='https://via.placeholder.com/220/d8a1b5/ffffff?text=🐱'">
                     <div id="meowText">Seni seviyorum!! ❤️</div>
                 </div>
             </section>
         </div>
     </div>
 
-    <audio id="birthdayMusic" loop><source src="müzik.mp3" type="audio/mpeg"></audio>
-    <button class="music-btn" id="musicToggle">▶</button>
+    <button class="music-btn" id="musicToggle">🎵</button>
 
     <script>
-        // TARİH KONTROLÜ
-        const birthdayDate = new Date("January 29, 2026 01:00:00").getTime();
-        let kilitAcik = false; // Test için bunu 'true' yapabilirsin
+        // KİLİT KALDIRILDI - HER ZAMAN AÇILABİLİR
+        let kilitAcik = true;
 
+        // Geri sayım (görsel amaçlı - artık kilit yok)
+        const birthdayDate = new Date("January 29, 2026 12:00:00").getTime();
+        
         const timer = setInterval(function() {
             const now = new Date().getTime();
             const distance = birthdayDate - now;
@@ -179,28 +192,24 @@
 
             if (distance <= 0) {
                 clearInterval(timer);
-                kilitAcik = true;
-                document.getElementById("baslik").innerText = "Bugün Büyük Gün! 🎉";
-                document.getElementById("uyari").innerText = "Sürpriz hazır! Tıkla!";
             }
         }, 1000);
 
+        // SÜRPRIZ BUTONU - ARTIK HER ZAMAN ÇALIŞIR
         document.getElementById('surpriseBtn').onclick = function() {
-            if (!kilitAcik) {
-                alert("Henüz zamanı gelmedi Ada! Biraz daha sabretmelisin. 😊");
-                return;
-            }
             document.getElementById('intro').style.display = 'none';
             document.getElementById('content').style.display = 'block';
             
-            // Yıldız haritasını içerik açıldığında çiz
+            // Yıldız haritasını çiz
             setTimeout(drawStarMap, 100); 
-
-            try {
-                document.getElementById('birthdayMusic').play();
-            } catch(e) { console.log("Otomatik oynatma tarayıcı tarafından engellendi"); }
             
+            // Konfeti patlatma
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            
+            // Tekrar konfeti 1 saniye sonra
+            setTimeout(() => {
+                confetti({ particleCount: 100, spread: 60, origin: { y: 0.5 } });
+            }, 1000);
         };
 
         // KEDİ EFEKTİ
@@ -208,21 +217,20 @@
         document.getElementById('catTrigger').onclick = function() {
             catImg.classList.toggle('jump');
             document.getElementById('meowText').style.display = 'block';
-            setTimeout(() => { catImg.classList.remove('jump'); document.getElementById('meowText').style.display = 'none'; }, 3000);
+            setTimeout(() => { 
+                catImg.classList.remove('jump'); 
+                document.getElementById('meowText').style.display = 'none'; 
+            }, 3000);
         };
 
-        // MÜZİK BUTONU
+        // MÜZİK BUTONU (Simgesel - gerçek ses yok)
         let isPlaying = false;
         document.getElementById('musicToggle').onclick = function() {
-            const music = document.getElementById('birthdayMusic');
-            if (isPlaying) { music.pause(); this.innerText = '▶'; } 
-            else { music.play(); this.innerText = '||'; }
             isPlaying = !isPlaying;
+            this.innerText = isPlaying ? '⏸️' : '🎵';
         };
 
-        // ---------------------------------------------------------
-        // YENİ YILDIZ HARİTASI (CANVAS İÇİNDE)
-        // ---------------------------------------------------------
+        // YILDIZ HARİTASI
         function drawStarMap() {
             const canvas = document.getElementById('starMap');
             if (!canvas) return;
@@ -230,27 +238,25 @@
             const width = canvas.width;
             const height = canvas.height;
 
-            // Arka planı temizle
             ctx.clearRect(0, 0, width, height);
 
             const centerX = width / 2;
             const centerY = height / 2;
 
-            // Kova Burcu (Aquarius) Çizimi - Pembe/Beyaz tonlarda
+            // Kova Burcu (Aquarius)
             const aquariusStars = [
                 {x: centerX + 20, y: centerY - 60, name: 'Sadalmelik'},
                 {x: centerX - 30, y: centerY - 70, name: 'Sadalsuud'},
-                {x: centerX, y: centerY - 40, name: 'Eta Aquarii'}, // Merkez
+                {x: centerX, y: centerY - 40, name: 'Eta Aquarii'},
                 {x: centerX - 10, y: centerY - 10, name: 'Ancha'},
                 {x: centerX + 30, y: centerY + 10, name: 'Skat'},
                 {x: centerX + 60, y: centerY + 40, name: 'Albali'}
             ];
 
-            // Çizgileri çiz
+            // Bağlantı çizgileri
             ctx.beginPath();
             ctx.strokeStyle = 'rgba(255, 192, 203, 0.4)';
             ctx.lineWidth = 1.5;
-            // Basit bir bağlantı
             ctx.moveTo(aquariusStars[1].x, aquariusStars[1].y);
             ctx.lineTo(aquariusStars[2].x, aquariusStars[2].y);
             ctx.lineTo(aquariusStars[0].x, aquariusStars[0].y);
@@ -259,7 +265,7 @@
             ctx.lineTo(aquariusStars[4].x, aquariusStars[4].y);
             ctx.stroke();
 
-            // Burç Yıldızlarını çiz
+            // Yıldızlar
             aquariusStars.forEach(star => {
                 ctx.beginPath();
                 ctx.fillStyle = '#fff';
@@ -270,7 +276,7 @@
                 ctx.shadowBlur = 0;
             });
 
-            // Rastgele Arka Plan Yıldızları
+            // Arka plan yıldızları
             for(let i=0; i<150; i++) {
                 const x = Math.random() * width;
                 const y = Math.random() * height;
@@ -290,10 +296,7 @@
             ctx.fillText("Kova Takımyıldızı", centerX, centerY + 80);
         }
 
-
-        // ---------------------------------------------------------
         // CUPCAKE OYUNU
-        // ---------------------------------------------------------
         const gameCanvas = document.getElementById('gameCanvas');
         const gameCtx = gameCanvas.getContext('2d');
         let gameRunning = false;
@@ -323,7 +326,6 @@
             if (!gameRunning) return;
             gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             
-            // Sepet
             gameCtx.fillStyle = '#ff69b4';
             gameCtx.fillRect(basketX, gameCanvas.height - 50, 50, 40);
             gameCtx.fillStyle = '#ff85cc';
@@ -382,7 +384,6 @@
             document.getElementById('gameMessage').textContent = `Oyun Bitti! ${msg} Skor: ${score}`;
         }
 
-        // Mouse/Touch Kontrol
         function moveBasket(clientX) {
             const rect = gameCanvas.getBoundingClientRect();
             let x = clientX - rect.left - 25;
@@ -392,14 +393,12 @@
         gameCanvas.addEventListener('touchmove', e => { e.preventDefault(); moveBasket(e.touches[0].clientX); });
         document.getElementById('startGameBtn').addEventListener('click', startGame);
 
-        // ---------------------------------------------------------
-        // GÜNCELLENMİŞ BLOCK BLAST OYUNU (Hitbox Düzeltildi)
-        // ---------------------------------------------------------
+        // BLOCK BLAST OYUNU
         const blockCanvas = document.getElementById('blockBlastCanvas');
         const blockCtx = blockCanvas.getContext('2d');
         const gridSize = 8;
         const cellSize = 40;
-        const gridOffsetX = 40; // Izgarayı ortalamak için
+        const gridOffsetX = 40;
         const gridOffsetY = 100;
         
         let blockGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(0));
@@ -407,7 +406,7 @@
         let currentPiece = null;
         let nextPieces = [];
         let isDragging = false;
-        let dragStartPos = {x:0, y:0}; // Parçanın neresinden tuttuğumuz
+        let dragStartPos = {x:0, y:0};
 
         const blockShapes = [
             [[1]], [[1,1]], [[1],[1]], [[1,1],[1,1]], 
@@ -428,13 +427,12 @@
             const colors = ['#ff69b4', '#ff85cc', '#9370db', '#ff1493', '#db7093'];
             for (let i = 0; i < 3; i++) {
                 const shape = blockShapes[Math.floor(Math.random() * blockShapes.length)];
-                // Parçaları yan yana diz (Canvas genişliği 400)
                 nextPieces.push({
                     shape: shape,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    x: 30 + i * 110, // Aralıklı yerleşim
+                    x: 30 + i * 110,
                     y: 30,
-                    scale: 25 // Aşağıdaki önizleme boyutu
+                    scale: 25
                 });
             }
         }
@@ -442,7 +440,6 @@
         function drawBlockGame() {
             blockCtx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
 
-            // 1. Grid Çizimi
             for (let r = 0; r < gridSize; r++) {
                 for (let c = 0; c < gridSize; c++) {
                     const x = c * cellSize + gridOffsetX;
@@ -451,7 +448,6 @@
                     if (blockGrid[r][c]) {
                         blockCtx.fillStyle = blockGrid[r][c];
                         blockCtx.fillRect(x, y, cellSize-2, cellSize-2);
-                        // Parlama efekti
                         blockCtx.strokeStyle = "rgba(255,255,255,0.5)";
                         blockCtx.strokeRect(x, y, cellSize-2, cellSize-2);
                     } else {
@@ -461,15 +457,11 @@
                 }
             }
 
-            // 2. Alt Kısımdaki Parçalar
             nextPieces.forEach(p => {
                 if(p) drawPiece(p.shape, p.x, p.y, p.color, p.scale);
             });
 
-            // 3. Sürüklenen Parça (En üstte çizilmeli)
             if (currentPiece && isDragging) {
-                // Sürüklerken boyut orijinal ızgara boyutu (40px) olsun
-                // Mouse'un biraz yukarısında çiz (offset) ki parmak/mouse kapatmasın
                 drawPiece(currentPiece.shape, currentPiece.x, currentPiece.y, currentPiece.color, cellSize);
             }
         }
@@ -487,63 +479,40 @@
             });
         }
 
-        // MOUSE EVENTS (Hitbox Düzeltilmiş)
         blockCanvas.addEventListener('mousedown', e => handleInputStart(e));
         blockCanvas.addEventListener('mousemove', e => handleInputMove(e));
         blockCanvas.addEventListener('mouseup', e => handleInputEnd(e));
-        
-        // TOUCH EVENTS
-        blockCanvas.addEventListener('touchstart', e => {
-            e.preventDefault(); 
-            handleInputStart(e.touches[0]);
-        });
-        blockCanvas.addEventListener('touchmove', e => {
-            e.preventDefault();
-            handleInputMove(e.touches[0]);
-        });
-        blockCanvas.addEventListener('touchend', e => {
-            e.preventDefault();
-            handleInputEnd(e.changedTouches[0]);
-        });
+        blockCanvas.addEventListener('touchstart', e => { e.preventDefault(); handleInputStart(e.touches[0]); });
+        blockCanvas.addEventListener('touchmove', e => { e.preventDefault(); handleInputMove(e.touches[0]); });
+        blockCanvas.addEventListener('touchend', e => { e.preventDefault(); handleInputEnd(e.changedTouches[0]); });
 
         function getMousePos(evt) {
             const rect = blockCanvas.getBoundingClientRect();
-            return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
+            return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
         }
 
         function handleInputStart(evt) {
             const pos = getMousePos(evt);
             
-            // Hangi parçaya tıklandı?
             for(let i=0; i<nextPieces.length; i++) {
                 const p = nextPieces[i];
                 if(!p) continue;
                 
-                // Basit bounding box kontrolü (scale 25px üzerinden)
                 const pWidth = p.shape[0].length * p.scale;
                 const pHeight = p.shape.length * p.scale;
                 
-                // Hitbox'ı biraz genişletelim ki mobilde kolay seçilsin (+10px padding)
                 if (pos.x >= p.x - 10 && pos.x <= p.x + pWidth + 10 &&
                     pos.y >= p.y - 10 && pos.y <= p.y + pHeight + 10) {
                     
-                    // Seçilen parçayı kopyala
                     currentPiece = { ...p, originalIndex: i };
-                    
-                    // Tıkladığımız yer ile parçanın sol üst köşesi arasındaki fark
                     dragStartPos.x = pos.x - p.x;
                     dragStartPos.y = pos.y - p.y;
                     
-                    // Parçayı hemen mouse'un ortasına oturt (daha doğal his)
                     const actualWidth = p.shape[0].length * cellSize;
                     const actualHeight = p.shape.length * cellSize;
                     
-                    // Sürüklemeye başlarken parçayı ortala
                     currentPiece.x = pos.x - (actualWidth / 2);
-                    currentPiece.y = pos.y - (actualHeight / 2) - 30; // Hafif yukarıda tut
+                    currentPiece.y = pos.y - (actualHeight / 2) - 30;
                     
                     isDragging = true;
                     drawBlockGame();
@@ -556,8 +525,6 @@
             if (!isDragging || !currentPiece) return;
             const pos = getMousePos(evt);
             
-            // Parçanın sol üst köşesini güncelle
-            // Mouse'un tam altında değil, biraz yukarısında olsun (-30px)
             const actualWidth = currentPiece.shape[0].length * cellSize;
             const actualHeight = currentPiece.shape.length * cellSize;
             
@@ -570,23 +537,13 @@
         function handleInputEnd(evt) {
             if (!isDragging || !currentPiece) return;
             
-            // Bırakılan yer ızgaraya denk geliyor mu?
-            // Parçanın MERKEZİNİ referans alalım
-            const centerX = currentPiece.x + (currentPiece.shape[0].length * cellSize) / 2;
-            const centerY = currentPiece.y + (currentPiece.shape.length * cellSize) / 2;
-            
-            // Grid koordinatlarına çevir
             const col = Math.floor((currentPiece.x - gridOffsetX + (cellSize/2)) / cellSize);
             const row = Math.floor((currentPiece.y - gridOffsetY + (cellSize/2)) / cellSize);
 
             if (canPlace(currentPiece.shape, row, col)) {
                 placeShape(currentPiece.shape, row, col, currentPiece.color);
                 checkLines();
-                
-                // Aşağıdaki listeden parçayı sil
                 nextPieces[currentPiece.originalIndex] = null;
-                
-                // Hepsi bitti mi?
                 if (nextPieces.every(p => p === null)) generateNextPieces();
             }
 
@@ -601,7 +558,6 @@
                     if (shape[i][j]) {
                         let nr = r + i;
                         let nc = c + j;
-                        // Sınır dışı veya dolu mu?
                         if (nr < 0 || nr >= gridSize || nc < 0 || nc >= gridSize || blockGrid[nr][nc]) {
                             return false;
                         }
@@ -624,7 +580,6 @@
         function checkLines() {
             let linesCleared = 0;
             
-            // Satır kontrol
             for (let r = 0; r < gridSize; r++) {
                 if (blockGrid[r].every(v => v !== 0)) {
                     blockGrid[r].fill(0);
@@ -632,8 +587,6 @@
                 }
             }
             
-            // Sütun kontrol (biraz daha karmaşık, geçici matris kullanmadan)
-            // Sütunları temizlemek için önce hangi sütunların dolu olduğunu bul
             let colsToClear = [];
             for (let c = 0; c < gridSize; c++) {
                 let isFull = true;
@@ -658,7 +611,6 @@
         }
 
         document.getElementById('startBlockBtn').onclick = initBlockGame;
-
     </script>
 </body>
 </html>
